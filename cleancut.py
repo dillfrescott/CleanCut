@@ -188,9 +188,9 @@ def process_mkv(p: Path, o):
 
 def process_all(d="."):
     o={"clean_subs":ask_yes_no("Remove blasphemous words from subtitles?"),"remove_eng_audio":ask_yes_no("Remove English audio and keep only Japanese?"),"remove_non_eng_subs":ask_yes_no("Remove non-English subtitles?"),"whisper_censor":ask_yes_no("Use Whisper large-v3 to detect and silence bad words in English audio?")}
-    f=list(Path(d).rglob("*.mkv"))
+    f=list(Path(d).glob("*.mkv"))
     if not f:
-        print("No .mkv files found.")
+        print(f"No .mkv files found in '{d}'.")
         return
     for m in tqdm(f,desc="Processing MKV files",unit="file", file=sys.stdout):
         try:
@@ -199,4 +199,9 @@ def process_all(d="."):
             tqdm.write(f"Error processing {m.name}: {e}")
 
 if __name__=="__main__":
-    process_all()
+    target_dir = sys.argv[1] if len(sys.argv) > 1 else "."
+    if not os.path.isdir(target_dir):
+        print(f"Usage: python {sys.argv[0]} [directory]")
+        print(f"Error: Directory '{target_dir}' not found.")
+        sys.exit(1)
+    process_all(target_dir)
