@@ -14,7 +14,7 @@ BAD_WORD_PATTERN = re.compile(
     """,
     flags=re.IGNORECASE | re.VERBOSE
 )
-REPLACEMENT_WORD = "[REDACTED]"
+REPLACEMENT_WORD = "damn"
 
 def ask_yes_no(prompt):
     while True:
@@ -109,9 +109,6 @@ def whisper_censor_replace_english(mkv_path: Path, eng_info: dict):
 
 def process_mkv(p: Path, o):
     v,a,s=get_stream_ids(p)
-    print(f"\n🎧 Detected audio streams in {p.name}:")
-    for k,vlist in a.items():
-        print(f"  {k}: {[i['id'] for i in vlist]}")
     jpn=a.get("jpn",[])
     eng=a.get("eng",[]) or a.get("und",[])
     engsubs=s.get("eng",[]) or s.get("und",[])
